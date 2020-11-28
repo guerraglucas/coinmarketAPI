@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <title>CoinMarketCap</title>
+  </head>
+  <body>
+    <nav aria-label="breadcrumbs">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">
+          Coin Market Cap
+        </li>
+      </ol>
+    </nav>
+    <div class="d-flex p-3 bd-highlight">
+      <div id="coins"></div>
+    </div>
+    <script>
+
+      let totalMarketCap = 0;
+      const apikey = {
+        key: '10b9ec30-2658-4d99-a6b5-a3388e74db36'
+      }
+
+      request('GET', 'https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest?CMC_PRO_API_KEY=' + apikey.key)
+      .then((res) => {
+        let totalMarketCapJson = JSON.parse(res.target.responseText);
+        totalMarketCap = totalMarketCapJson.data.quote.USD.total_market_cap
+        document.querySelector('#coins').innerHTML = `Total Market Cap: ${totalMarketCap}`
+        console.log(totalMarketCap)
+      })
+      .catch()
+
+      function request(method, url) {
+        return new Promise(function (resolve, reject) {
+          let xhr = new XMLHttpRequest();
+          xhr.open(method, url);
+          xhr.onload = resolve;
+          xhr.onerror = reject;
+          xhr.send();
+        })
+      }
+
+    </script>
+
+
+
+
+<!--     <script type="text/javascript">
+      //Minha API
+      const apiKey = {
+        key: "10b9ec30-2658-4d99-a6b5-a3388e74db36",
+      };
+
+      // GET Fetch Req
+      fetch(
+        "https://pro-api.coinmarketcap.com/v1/cryptocurrency/map?CMC_PRO_API_KEY=" +
+          apiKey.key
+      )
+        .then((response) => {
+          if (!response.ok)
+            throw new Error(
+              "Erro ao executar a requisição, status " + response.status
+            );
+          return response.json();
+        })
+        .then((api) => {
+          let text = "";
+
+          //to get 10 coins from the list of coins
+          for (let i = 0; i < 10; i++) {
+            //loop to show API information
+            text =
+              text +
+              `
+            <div class="media">
+              <img src="https://source.unsplash.com/random/500x500" class="align-self-center mr-3" alt="random image" width="100" height="60"/>
+              <div class="media-body">
+                <h5 class="mt-2">${api.data[i].name}</h5>
+                <p>${api.data[i].symbol}</p>
+              </div>
+            </div>
+
+            `;
+            document.getElementById("coins").innerHTML = text;
+          }
+        })
+        .catch((error) => {
+          console.error(error.message);
+        }); -->
+    </script>
+  </body>
+</html>
